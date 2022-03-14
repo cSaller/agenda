@@ -58,7 +58,7 @@ export const getByClient = async (req, res) => {
       },
       include: { procedures: true }
     })
-    if (!schedule) throw new Error('schedule not found')
+    if (!schedule.length) throw new Error('schedule not found')
     return res.json(schedule)
   } catch (error) {
     const errorMsg = error.message
@@ -106,7 +106,7 @@ export const getByRange = async (req, res) => {
       },
       include: { procedures: true }
     })
-    if (!schedule) throw new Error('schedule not found')
+    if (!schedule.length) throw new Error('schedule not found')
     return res.json(schedule)
   } catch (error) {
     const errorMsg = error.message
