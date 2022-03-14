@@ -12,6 +12,9 @@
     "db:seed": "babel-node src/database/seed.js"
   },
   "dependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
     "@prisma/client": "^2.30.3",
     "babel-plugin-module-resolver": "^4.1.0",
     "bcryptjs": "^2.4.3",
@@ -22,10 +25,7 @@
     "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.17.6",
-    "@babel/core": "^7.17.5",
     "@babel/node": "^7.16.8",
-    "@babel/preset-env": "^7.16.11",
     "dotenv": "^10.0.0",
     "morgan": "^1.10.0",
     "prisma": "^2.30.3"
