@@ -4,7 +4,7 @@ import router from 'routes'
 import {
   authMiddleware,
   errorHandlingMiddleware
-} from 'middlewares/error-handling-middleware'
+} from 'middlewares'
 import { NODE_ENV, PORT } from 'config'
 
 const app = express()
