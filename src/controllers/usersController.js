@@ -11,7 +11,7 @@ import {
 } from 'helpers'
 
 export const create = async (req, res) => {
-  const { email, password, name, birthDate, phone, isAdmin, cpf, address } = req.body
+  const { email, password, name, birthDate, phone, cpf, address } = req.body
 
   let parsedBirthdate = new Date(birthDate)
   parsedBirthdate.toString() === 'Invalid Date'
@@ -27,7 +27,6 @@ export const create = async (req, res) => {
           name,
           birthDate: parsedBirthdate,
           phone,
-          isAdmin,
           cpf,
           address
         }
