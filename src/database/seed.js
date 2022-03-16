@@ -3,8 +3,10 @@ import prisma from './prisma'
 import { encryptPassword } from 'helpers'
 
 async function seed() {
-  await prisma.user.create({
-    data: {
+  await prisma.user.upsert({
+    where: { email: 'admin@email.com' },
+    update: {},
+    create: {
       email: 'admin@email.com',
       password: await encryptPassword('superpassword'),
       name: 'Admin',
