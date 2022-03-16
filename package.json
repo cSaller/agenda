@@ -9,7 +9,8 @@
     "dev": "nodemon --exec babel-node src/index.js",
     "prisma": "prisma",
     "db:update": "prisma db push && prisma generate",
-    "db:seed": "babel-node src/database/seed.js"
+    "db:seed": "babel-node src/database/seed.js",
+    "heroku-postbuild": "yarn db:update && yarn db:seed && yarn build"
   },
   "dependencies": {
     "@babel/cli": "^7.17.6",
