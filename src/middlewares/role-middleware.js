@@ -11,7 +11,7 @@ export const roleMiddleware = (req, res, next) => {
   if (decryptedToken.isAdmin) return next()
   throw Unauthorized('You don\'t have permission to access this resource')
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return InternalServerError(error.message)
   }
 }
