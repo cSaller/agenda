@@ -25,7 +25,7 @@ export const authMiddleware = (req, res, next) => {
     if (error.message.includes("jwt expired")) {
       return Unauthorized('Token expired')
     }
-    console.log(error)
+    console.error(error)
     return InternalServerError(error.message)
   }
 }

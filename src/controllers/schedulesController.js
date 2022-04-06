@@ -127,7 +127,6 @@ export const update = async (req, res) => {
     : scheduleDate
 
   try {
-    console.log(id)
     return res.json(
       await prisma.schedule.update({
         where: { id },
