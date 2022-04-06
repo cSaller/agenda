@@ -11,7 +11,7 @@ async function seed() {
       password: await encryptPassword('superpassword'),
       name: 'Admin',
       birthDate: '2000-01-01T12:00:00+00:00',
-      phone: '+5553912345678',
+      phone: '53912345678',
       isAdmin: true,
       cpf: '1234567890',
       address: {
@@ -27,8 +27,8 @@ async function seed() {
 }
 
 seed()
-  .catch((e) => {
-    console.error(e)
+  .catch((error) => {
+    console.error(error)
     process.exit(1)
   })
   .finally(async () => {
