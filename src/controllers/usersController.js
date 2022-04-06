@@ -19,19 +19,21 @@ export const create = async (req, res) => {
     : parsedBirthdate
 
   try {
-    return res.json(
-      await prisma.user.create({
-        data: {
-          email,
-          password: await encryptPassword(password),
-          name,
-          birthDate: parsedBirthdate,
-          phone,
-          cpf,
-          address
-        }
-      })
-    )
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: await encryptPassword(password),
+        name,
+        birthDate: parsedBirthdate,
+        phone,
+        cpf,
+        address
+      }
+    })
+
+    delete user.password
+
+    return res.json(user)
   } catch (error) {
     const errorMsg = error.message
     if (errorMsg.includes('Unique constraint failed')) {
@@ -49,14 +51,26 @@ export const get = async (req, res) => {
   const { id } = req.params
   try {
     const user = await prisma.user.findUnique({
-      where: { id }
+      where: { id },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        birthDate: true,
+        phone: true,
+        isAdmin: true,
+        cpf: true,
+        address: true,
+        createdAt: true,
+        updatedAt: true
+      }
     })
-    if (!user) throw new Error('user not found')
+
     return res.json(user)
   } catch (error) {
     const errorMsg = error.message
-    if (errorMsg.includes('user not found')) {
-      return NotFound('User not found', res)
+    if (errorMsg.includes('No User found')) {
+      return NotFound(errorMsg, res)
     }
     console.error(error)
     return InternalServerError(errorMsg, res)
@@ -73,21 +87,24 @@ export const update = async (req, res) => {
     : parsedBirthdate
 
   try {
-    return res.json(
-      await prisma.user.update({
-        where: { id: id },
-        data: {
-          email,
-          password: password ? await encryptPassword(password) : undefined,
-          name,
-          birthDate: parsedBirthdate,
-          phone,
-          isAdmin,
-          cpf,
-          address
-        }
-      })
-    )
+    const user = await prisma.user.update({
+      where: { id: id },
+      data: {
+        email,
+        password: password ? await encryptPassword(password) : undefined,
+        name,
+        birthDate: parsedBirthdate,
+        phone,
+        isAdmin,
+        cpf,
+        address
+      }
+    })
+
+    delete user.password
+
+    return res.json(user)
+
   } catch (error) {
     const errorMsg = error.message
     if (errorMsg.includes('Record to update not found')) {
@@ -132,6 +149,8 @@ export const login = async (req, res) => {
     const isValid = await bcrypt.compare(password, user.password)
 
     if (!isValid) throw new Error('invalid password')
+
+    delete user.password
 
     return res.json({
       ...user,
