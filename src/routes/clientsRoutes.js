@@ -1,11 +1,11 @@
 import { Router } from 'express'
 
 import Client from 'controllers/clientsController'
-import { roleMiddleware } from 'middlewares/role-middleware'
+import { roleMiddleware, validationMiddleware } from 'middlewares'
 
 const router = Router()
 
-router.post('/', Client.create)
+router.post('/', validationMiddleware, Client.create)
 router.get('/:id', Client.get)
 router.patch('/', Client.update)
 router.delete('/', roleMiddleware, Client.remove)

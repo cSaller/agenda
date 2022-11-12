@@ -1,38 +1,50 @@
-import { BadRequest, userSchema } from 'helpers'
+import {
+  BadRequest,
+  userSchema,
+  clientSchema,
+  procedureSchema,
+  scheduleSchema
+} from 'helpers'
+
+
+const validate = (schema, req, _, next) => {
+  const validation = schema.validate(req.body)
+  if (!validation.error) {
+    return next()
+  }
+  return validationErrorSend(validation)
+}
 
 export const validationMiddleware = (req, res, next) => {
   const mainPath = req.baseUrl.split('/')[2]
+
   switch (mainPath) {
     case 'clients': {
-      return 'TODO'
+      validate(clientSchema, req, res, next)
+      break
     }
     case 'procedures': {
-      return 'TODO'
+      validate(procedureSchema, req, res, next)
+      break
     }
     case 'schedules': {
-      return 'TODO'
+      validate(scheduleSchema, req, res, next)
+      break
     }
     case 'users': {
-      const validation = userSchema.validate(req.body)
-      if (!validation.error) {
-        return next()
-      }
-      validationErrorSend(validation)
-    }
-    default: {
-      return BadRequest()
+      validate(userSchema, req, res, next)
+      break
     }
   }
 }
 
 const validationErrorSend = validation => {
   if (validation.error.details.length === 1) {
-    return BadRequest(`Field '${validation.error.details[0].path}' is invalid or malformatted.`)
+    const field = validation.error.details[0].path
+    return BadRequest(`Field '${field}' is invalid or malformatted.`)
   }
 
-  const errors = []
-  validation.error.details.forEach(error => {
-    errors.push(error.path)
-  })
-  return BadRequest(`Fields '${errors}' are invalid or malformatted.`)
+  const fields = []
+  validation.error.details.map(error => fields.push(error.path))
+  return BadRequest(`Fields '${fields}' are invalid or malformatted.`)
 }

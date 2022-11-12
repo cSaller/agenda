@@ -50,6 +50,24 @@ export const get = async (req, res) => {
   }
 }
 
+export const getAll = async (req, res) => {
+  try {
+    const procedures = await prisma.procedure.findMany()
+
+    if (!procedures) throw new Error('procedures not found')
+
+    return res.json(procedures)
+  } catch (error) {
+    const errorMsg = error.message
+
+    if (errorMsg.includes('procedures not found')) {
+      return NotFound('Procedure not found', res)
+    }
+    console.error(error)
+    return InternalServerError(errorMsg, res)
+  }
+}
+
 export const update = async (req, res) => {
   const { id } = req.query
   const { name, value, duration } = req.body
@@ -98,6 +116,7 @@ export const remove = async (req, res) => {
 export default {
   create,
   get,
+  getAll,
   update,
   remove
 }
